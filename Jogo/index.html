@@ -51,7 +51,6 @@
         canvas {
             border: 1px solid black;
             margin: 20px auto 20px auto;
-            padding: 10px;
             display: block;
         }
     </style>
@@ -60,12 +59,40 @@
         var context;
         var canvasLargura;
         var canvasAltura;
+        var jogadorAltura, jogadorLargura, jogadorPosicaoX, jogadorPosicaoY;
+        var jogadorVelocidade;
+        var bolaRaio, bolaPosicaoX, bolaPosicaoY, bolaVelocidade;
 
         function inicializar() {
             canvas = document.getElementById("meuCanvas");
             context = canvas.getContext("2d");
             canvasLargura = canvas.width;
             canvasAltura = canvas.height;
+
+            jogadorAltura = 15;
+            jogadorLargura = 90;
+            jogadorPosicaoX = (canvasLargura - jogadorLargura) / 2;
+            jogadorPosicaoY = canvasAltura - jogadorAltura;
+            jogadorVelocidade = 20;
+
+            bolaRaio = 10;
+            bolaPosicaoX = canvasLargura / 2;
+            bolaPosicaoY = -bolaRaio;
+            bolaVelocidade = 5;
+
+            setInterval(gameLoop, 30);
+        }
+
+        function gameLoop(){
+            context.clearRect(0, 0, canvasLargura, canvasAltura);
+
+            context.beginPath();
+            context.arc(bolaPosicaoX, bolaPosicaoY, bolaRaio, 0, Math.PI * 2, true);
+            context.fill();
+
+            bolaPosicaoY += bolaVelocidade;
+
+            context.fillRect(jogadorPosicaoX, jogadorPosicaoY, jogadorLargura, jogadorAltura);
         }
         
     </script>

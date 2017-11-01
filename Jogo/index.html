@@ -8,6 +8,7 @@
         h1 {
             color: red;
             text-align: center;
+            
         }
         
         #div-principal {
@@ -80,6 +81,8 @@
             bolaPosicaoY = -bolaRaio;
             bolaVelocidade = 5;
 
+            document.addEventListener('keydown', teclaPressionada);
+
             setInterval(gameLoop, 30);
         }
 
@@ -91,8 +94,21 @@
             context.fill();
 
             bolaPosicaoY += bolaVelocidade;
+            
+            if (bolaPosicaoY > canvasAltura){
+                bolaPosicaoY = -bolaRaio;
+            }
 
             context.fillRect(jogadorPosicaoX, jogadorPosicaoY, jogadorLargura, jogadorAltura);
+        }
+
+        function teclaPressionada(e){
+            if (e.keyCode == 37){
+                jogadorPosicaoX -= jogadorVelocidade;
+            }
+            if (e.keyCode == 39){
+                jogadorPosicaoX += jogadorVelocidade;
+            }
         }
         
     </script>

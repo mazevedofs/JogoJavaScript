@@ -6,14 +6,14 @@
     <title>Jogo</title>
     <style>
         h1 {
-            color: red;
+            color: #19a097;
+            font-family: Arial;
             text-align: center;
-            
         }
         
         #div-principal {
             /*  usa-se  # para id*/
-            border: 1px solid red;
+            /*border: 1px solid red;*/
             width: 800px;
             background-color: white;
             margin: 20px auto 20px auto;
@@ -21,7 +21,7 @@
         }
         
         header {
-            border: 1px solid red;
+            /*border: 1px solid red;*/
             width: 100%;
             display: inline-block;
         }
@@ -43,16 +43,24 @@
         
         .div-conteudo {
             /*  Usa-se .(ponto) para class*/
-            border: 1px solid black;
+            /*border: 1px solid black;*/
             margin: 20px auto 20px auto;
             background-color: #f7baa1;
             padding: 10px;
+            font-family: 'Arial Narrow';
+            color: #e04343;
         }
         
         canvas {
-            border: 1px solid black;
+            /*border: 1px solid black;*/
             margin: 20px auto 20px auto;
             display: block;
+        }
+
+        footer{
+            font-family: 'Arial Narrow';
+            text-align: center;
+           
         }
     </style>
     <script type="text/javascript">
@@ -63,6 +71,10 @@
         var jogadorAltura, jogadorLargura, jogadorPosicaoX, jogadorPosicaoY;
         var jogadorVelocidade;
         var bolaRaio, bolaPosicaoX, bolaPosicaoY, bolaVelocidade;
+        var jogadorPontos;
+        var base_img;
+        var highScore;
+
 
         function inicializar() {
             canvas = document.getElementById("meuCanvas");
@@ -81,36 +93,74 @@
             bolaPosicaoY = -bolaRaio;
             bolaVelocidade = 5;
 
+            jogadorPontos = 0;
+
+            highScore = 0;
+
+            base_img = new Image();
+            base_img.src = 'bg-canvas.jpg';
+
             document.addEventListener('keydown', teclaPressionada);
 
             setInterval(gameLoop, 30);
+
         }
 
-        function gameLoop(){
+        function gameLoop() {
             context.clearRect(0, 0, canvasLargura, canvasAltura);
+
+            context.drawImage(base_img, 0, 0, canvasLargura, canvasAltura);
 
             context.beginPath();
             context.arc(bolaPosicaoX, bolaPosicaoY, bolaRaio, 0, Math.PI * 2, true);
             context.fill();
 
             bolaPosicaoY += bolaVelocidade;
-            
-            if (bolaPosicaoY > canvasAltura){
+
+
+            if (bolaPosicaoY > canvasAltura) {
+                bolaPosicaoX = Math.random() * canvasLargura;
                 bolaPosicaoY = -bolaRaio;
+
+                bolaVelocidade = 5;
+                if (jogadorPontos > highScore) {
+                    highScore = jogadorPontos;
+                }
+                jogadorPontos = 0;
             }
 
+
+
+            if (bolaPosicaoY >= canvasAltura - jogadorAltura && bolaPosicaoX > jogadorPosicaoX && bolaPosicaoX < jogadorPosicaoX + jogadorLargura) {
+                jogadorPontos++;
+                bolaPosicaoX = Math.random() * canvasLargura;
+                bolaPosicaoY = -bolaRaio;
+                bolaVelocidade++;
+            }
+
+            context.font = "14pt Arial";
+            context.fillText("Pontos: " + jogadorPontos, 10, 20);
+            if (highScore > 0) {
+                context.fillText("Recorde: " + highScore, 10, 40);
+            }
             context.fillRect(jogadorPosicaoX, jogadorPosicaoY, jogadorLargura, jogadorAltura);
+
         }
 
-        function teclaPressionada(e){
-            if (e.keyCode == 37){
-                jogadorPosicaoX -= jogadorVelocidade;
+        function teclaPressionada(e) {
+            if (e.keyCode == 37) {
+                if (jogadorPosicaoX > 0) {
+                    jogadorPosicaoX -= jogadorVelocidade;
+                }
             }
-            if (e.keyCode == 39){
-                jogadorPosicaoX += jogadorVelocidade;
+            if (e.keyCode == 39) {
+                if (jogadorPosicaoX < (canvasLargura - jogadorLargura)) {
+                    jogadorPosicaoX += jogadorVelocidade;
+                }
             }
+
+
         }
-        
     </script>
 </head>
 
@@ -121,16 +171,17 @@
             <!--CABEÇALHO-->
             <img id="logo-recode" src="logo_recode.png" height="40px">
             <img id="logo-mva" src="logo_mva.png" height="40px">
-            <h1 id="titulo">Meu Primeiro Jogo</h1>
+            <h1 id="titulo">MEU PRIMEIRO JOGO</h1>
         </header>
         <div class="div-conteudo">
             <!--divisão do site-->
-            Minha div
+            <!--Minha div-->
             <!--canvas-tag para criar canvas, que permite um objeto gráfico em javascript-->
             <canvas id="meuCanvas" width="600" height="480"></canvas>
         </div>
         <div class="div-conteudo">
             <h2>Instruções</h2>
+            <p> Use as teclas seta direita e esquerda para mover a barra </p>
         </div>
         <footer>
             <p>Desenvolvido por: Marina Azevedo<br> Aluna do curso de Introdução a Programação - Recode/Microsoft</p>
